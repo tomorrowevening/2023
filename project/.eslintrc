@@ -1,0 +1,64 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "eslint-config-airbnb-base"
+  ],
+  "plugins": [],
+  "rules": {
+    "no-plusplus": "off",
+    "comma-dangle": "off",
+    "brace-style": "off",
+    "class-methods-use-this": "off",
+    "no-bitwise": "off",
+    "no-param-reassign": "off",
+    "max-classes-per-file": ["error", 100],
+    "max-len": [2, 120, 2, {
+      "ignoreUrls": true,
+      "ignoreComments": false
+    }],
+    "arrow-body-style": ["error", "always"],
+    "func-names": ["error", "never"],
+    "object-shorthand": ["error", "methods"],
+    "no-underscore-dangle": "off",
+    "no-useless-escape": "off",
+    "import/extensions": ["error", "ignorePackages", {
+      "js": "never",
+      "ts": "never"
+    }],
+    "import/no-unresolved": "off",
+    "import/no-webpack-loader-syntax": "off",
+    "eol-last": ["error", "never"],
+    "default-case": "error",
+    "no-extra-semi": "off",
+    "semi": "off",
+    "@typescript-eslint/semi": ["error"],
+    "import/no-dynamic-require": "off",
+    "prefer-destructuring": ["error", {
+      "array": false,
+      "object": false
+    }, {
+      "enforceForRenamedProperties": false
+    }],
+    "dot-notation": "error",
+    "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": false }],
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": "off",
+    "no-restricted-syntax": "off",
+    "no-console": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": [
+        ["@", "./src"]
+      ],
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    }
+  }
+}

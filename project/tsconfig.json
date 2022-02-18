@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "noImplicitAny": false,
+    "strict": true,
+    "importHelpers": true,
+    "target": "es6",
+    "module": "es6",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "lib": [
+      "dom",
+      "es2015",
+      "es2016"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "removeComments": true,
+    "baseUrl": "src",
+    "paths": {
+      "@scss/*": ["scss/*"],
+      "@ts/*": ["scripts/*"],
+      "@glsl/*": ["shaders/*"]
+    }
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "rules": {
+    "import/extensions": "off",
+    "import/no-unresolved": "off"
+  }
+}

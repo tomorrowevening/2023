@@ -1,0 +1,60 @@
+{
+  "name": "2023",
+  "version": "0.0.0",
+  "description": "Interactive WebGL MoGraph",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=development npx webpack serve --allowed-hosts all --open",
+    "secure": "npm run start --https",
+    "build": "NODE_ENV=production webpack --progress --profile --colors",
+    "lint": "eslint --fix -c .eslintrc src"
+  },
+  "keywords": [
+    "Tomorrow",
+    "Evening",
+    "ThreeJS",
+    "TypeScript",
+    "WebGL",
+    "Motion",
+    "Graphics"
+  ],
+  "author": "Colin Duffy, Tomorrow Evening",
+  "dependencies": {
+    "@tweakpane/core": "1.0.8",
+    "@tweakpane/plugin-essentials": "0.1.4",
+    "@types/three": "0.129.1",
+    "detect-gpu": "3.0.0",
+    "glsl-blend": "1.0.3",
+    "glsl-curl-noise": "0.0.4",
+    "glsl-easings": "1.0.0",
+    "glsl-noise": "0.0.0",
+    "glslify": "7.1.1",
+    "glslify-loader": "2.0.0",
+    "postprocessing": "6.24.0",
+    "three": "0.137.5",
+    "tomorrow_web": "0.0.993",
+    "tweakpane": "3.0.7",
+    "tweakpane-image-plugin": "1.1.3"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "7.0.0",
+    "css-loader": "5.0.1",
+    "css-minimizer-webpack-plugin": "1.2.0",
+    "eslint": "8.9.0",
+    "eslint-import-resolver-alias": "1.1.2",
+    "eslint-plugin-import": "2.25.4",
+    "file-loader": "6.2.0",
+    "html-minimizer-webpack-plugin": "3.5.0",
+    "mini-css-extract-plugin": "2.5.3",
+    "raw-loader": "4.0.2",
+    "sass": "1.49.7",
+    "sass-loader": "12.6.0",
+    "style-loader": "3.3.1",
+    "terser-webpack-plugin": "5.3.1",
+    "ts-loader": "9.2.6",
+    "typescript": "4.5.5",
+    "webpack": "5.69.0",
+    "webpack-cli": "4.9.2",
+    "webpack-dev-server": "4.7.4"
+  }
+}
