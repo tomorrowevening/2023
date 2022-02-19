@@ -5,8 +5,10 @@
     "node": true
   },
   "extends": [
+    "plugin:vue/vue3-essential",
     "eslint:recommended",
-    "eslint-config-airbnb-base"
+    "eslint-config-airbnb-base",
+    "@vue/typescript"
   ],
   "plugins": [],
   "rules": {
