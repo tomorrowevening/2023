@@ -11,11 +11,11 @@ const env = process.env.NODE_ENV;
 const isProd = env === 'production';
 
 const assets = {
-  'audio': false,
-  'json': false,
-  'images': true,
-  'models': false,
-  'video': false,
+  audio: false,
+  images: true,
+  json: true,
+  models: false,
+  video: false
 };
 
 const plugins = [
@@ -32,16 +32,15 @@ const plugins = [
   })
 ];
 
-// Include folders of used assets
 for (let i in assets) {
   if (assets[i]) {
     plugins.push(new CopyPlugin({
       patterns: [
         {
-          from: './public/' + i,
-          to: pathOutput + '/' + i
-        },
-      ],
+          from: `./public/${i}`,
+          to: `${pathOutput}/${i}`
+        }
+      ]
     }));
   }
 }
@@ -51,16 +50,38 @@ if (!isProd) {
 }
 
 module.exports = {
+  mode: isProd ? env : 'development',
   devServer: {
-    server: process.env.NODE_SECURE ? 'https' : 'http', 
+    contentBase: pathOutput,
     compress: true,
     port: 8080
   },
-  devtool: isProd ? 'source-map' : 'inline-source-map',
   entry: {
     app: './src/index.ts'
   },
-  mode: isProd ? env : 'development',
+  devtool: isProd ? 'source-map' : 'inline-source-map',
+  output: {
+    filename: 'main.js',
+    path: pathOutput
+  },
+  optimization: {
+    minimize: isProd,
+    minimizer: [
+      new HtmlMinimizerPlugin(),
+      new CssMinimizerPlugin(),
+      new TerserPlugin({
+        extractComments: true,
+      })
+    ]
+  },
+  resolve: {
+    alias: {
+      '@scss': path.resolve(__dirname, 'src/scss/'),
+      '@ts': path.resolve(__dirname, 'src/scripts/'),
+      '@glsl': path.resolve(__dirname, 'src/shaders/')
+    },
+    extensions: ['.js', '.ts']
+  },
   module: {
     rules: [
       {
@@ -91,28 +112,6 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       }
     ]
-  },
-  optimization: {
-    minimize: isProd,
-    minimizer: [
-      new HtmlMinimizerPlugin(),
-      new CssMinimizerPlugin(),
-      new TerserPlugin({
-        extractComments: true,
-      })
-    ]
-  },
-  output: {
-    filename: 'main.js',
-    path: pathOutput
-  },
-  resolve: {
-    alias: {
-      '@scss': path.resolve(__dirname, 'src/scss/'),
-      '@ts': path.resolve(__dirname, 'src/scripts/'),
-      '@glsl': path.resolve(__dirname, 'src/shaders/')
-    },
-    extensions: ['.js', '.ts']
   },
   plugins
 };
