@@ -13,8 +13,28 @@ body {
   color: #FFF;
 }
 
-button:focus {
-  outline: none;
+button {
+  &:focus {
+    outline: non;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.fsAbsolute {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.absoluteCenter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .hidden {
