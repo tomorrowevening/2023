@@ -4,12 +4,16 @@ import gl from '@ts/models/three';
 import { Events, Scenes } from '@ts/models/types';
 // Scenes
 import BaseScene from '@ts/scenes/BaseScene';
+import CompositeScene from '@ts/scenes/composite';
 import WelcomeScene from '@ts/scenes/welcome';
 
 class SceneController {
   currentScene?: BaseScene;
 
+  compositeScene: CompositeScene;
+
   constructor() {
+    this.compositeScene = new CompositeScene();
     dispatcher.addEventListener(Events.SHOW_SCENE, this.showScene);
     dispatcher.addEventListener(Events.HIDE_SCENE, this.hideScene);
   }
@@ -26,6 +30,7 @@ class SceneController {
 
   draw() {
     this.currentScene?.draw();
+    this.compositeScene.draw();
   }
 
   resize(width: number, height: number) {

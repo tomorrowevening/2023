@@ -1,9 +1,9 @@
 import { ShaderMaterial } from 'three';
 
 // @ts-ignore
-import vertex from '!raw-loader!glslify-loader!@glsl/materials/default.vert';
+import vertex from '!raw-loader!glslify-loader!@glsl/default.vert';
 // @ts-ignore
-import fragment from '!raw-loader!glslify-loader!@glsl/materials/default.frag';
+import fragment from '!raw-loader!glslify-loader!@glsl/default.frag';
 
 export default class WelcomeMaterial extends ShaderMaterial {
   constructor() {
@@ -16,7 +16,8 @@ export default class WelcomeMaterial extends ShaderMaterial {
         }
       },
       vertexShader: vertex,
-      fragmentShader: fragment
+      fragmentShader: fragment,
+      type: 'WelcomeMaterial'
     });
   }
 }

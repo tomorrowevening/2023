@@ -4,7 +4,6 @@ import studio from '@theatre/studio';
 import debug from '@ts/utils/debug';
 // Models
 import dispatcher from '@ts/models/dispatcher';
-import settings from '@ts/models/settings';
 import gl from '@ts/models/three';
 import { Events, Scenes } from '@ts/models/types';
 // Controllers

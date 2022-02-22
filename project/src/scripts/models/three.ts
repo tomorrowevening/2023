@@ -1,12 +1,33 @@
 import {
+  LinearFilter,
+  NearestFilter,
   VSMShadowMap,
-  WebGLRenderer
+  WebGLRenderer,
+  WebGLRenderTarget
 } from 'three';
 import settings, { Quality } from '@ts/models/settings';
 import debug from '@ts/utils/debug';
 
 class WebGLInstance {
   renderer!: WebGLRenderer;
+
+  renderTargets: Map<string, WebGLRenderTarget> = new Map<string, WebGLRenderTarget>();
+
+  constructor() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    this.renderTargets.set('main', new WebGLRenderTarget(width, height, {
+      minFilter: LinearFilter,
+      magFilter: NearestFilter
+    }));
+
+    this.renderTargets.set('ui', new WebGLRenderTarget(width, height, {
+      depthBuffer: false,
+      minFilter: LinearFilter,
+      magFilter: NearestFilter
+    }));
+  }
 
   init() {
     const canvas = document.getElementById('world') as HTMLCanvasElement;
@@ -32,6 +53,9 @@ class WebGLInstance {
   }
 
   resize(width: number, height: number) {
+    this.renderTargets.forEach((renderTarget: WebGLRenderTarget) => {
+      renderTarget.setSize(width, height);
+    });
     this.renderer.setSize(width, height);
   }
 

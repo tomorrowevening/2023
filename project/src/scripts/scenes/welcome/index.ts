@@ -19,6 +19,11 @@ export default class WelcomeScene extends BaseScene {
   }
 
   override draw(): void {
+    // gl.renderer.render(this.scene, orthoCamera);
+    const renderTarget = gl.renderTargets.get('main');
+    if (renderTarget) gl.renderer.setRenderTarget(renderTarget);
+    gl.renderer.setClearAlpha(0);
+    gl.renderer.clear();
     gl.renderer.render(this.scene, orthoCamera);
   }
 }
