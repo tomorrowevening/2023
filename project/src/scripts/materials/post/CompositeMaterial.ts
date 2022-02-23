@@ -1,6 +1,7 @@
 import {
   ShaderMaterial,
-  Texture
+  Texture,
+  Vector2
 } from 'three';
 import gl from '@ts/models/three';
 
@@ -8,7 +9,6 @@ import gl from '@ts/models/three';
 import vertex from '!raw-loader!glslify-loader!@glsl/default.vert';
 // @ts-ignore
 import fragment from '!raw-loader!glslify-loader!@glsl/post/composite.frag';
-import { val } from '@theatre/core';
 
 export default class CompositeMaterial extends ShaderMaterial {
   constructor() {
@@ -23,12 +23,21 @@ export default class CompositeMaterial extends ShaderMaterial {
           // @ts-ignore
           type: 't',
           value: gl.renderTargets.get('ui')
+        },
+        resolution: {
+          // @ts-ignore
+          type: 'v2',
+          value: new Vector2(window.innerWidth, window.innerHeight)
         }
       },
       vertexShader: vertex,
       fragmentShader: fragment,
-      type: 'CompositeMaterial'
+      type: 'post/CompositeMaterial'
     });
+  }
+
+  resize(width: number, height: number) {
+    this.uniforms.resolution.value.set(width, height);
   }
 
   set mainMap(value: Texture) {

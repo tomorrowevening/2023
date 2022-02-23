@@ -5,6 +5,8 @@
   width: 100%;
   max-width: 400px;
   text-align: center;
+  transition: all .25s cubic-bezier(.25,.25,.75,.75);
+  opacity: 0;
   div {
     position: relative;
     text-align: center;
@@ -25,5 +27,8 @@
       font-size: 12px;
       padding: 0 10%;
     }
+  }
+  &.visible {
+    opacity: 1;
   }
 }

@@ -1,9 +1,16 @@
 /**
  * Promise-based loader
  */
+import { CubeTexture, Texture } from 'three';
 import {
   fileName
 } from 'tomorrow_web/utils/dom';
+import {
+  loadCubeTexture,
+  loadTexture
+} from './three';
+import { assets, copyAssets } from '@ts/models/load';
+import GLTFPlayer from '@ts/animation/GLTFPlayer';
 
 export class Loader {
   supportsBlob = false;
@@ -222,13 +229,7 @@ export class Loader {
     return new Promise < any >((resolve, reject) => {
       let loaded = 0;
       const total = items.length;
-      const files = {
-        audio: {},
-        custom: {},
-        images: {},
-        json: {},
-        videos: {}
-      };
+      const files = Object.assign({}, assets);
 
       if (total < 1) {
         onProgress(1);
@@ -251,6 +252,7 @@ export class Loader {
         if (loaded >= total) {
           onProgress(1);
           killTimer();
+          copyAssets(files);
           resolve(files);
         }
       };
@@ -307,6 +309,35 @@ export class Loader {
             this.loadVideoElement(file).then((image: HTMLVideoElement) => {
               files.videos[fileID] = image;
               onLoad();
+            }).catch(() => {
+              killTimer();
+              // eslint-disable-next-line
+							reject(`Error loading: ${file}`);
+            });
+            break;
+          case 'cubeTexture':
+            loadCubeTexture(file).then((asset: CubeTexture) => {
+              files.cubeTextures[fileID] = asset;
+              onLoad();
+            }).catch(() => {
+              killTimer();
+              // eslint-disable-next-line
+							reject(`Error loading: ${file}`);
+            });
+            break;
+          case 'texture':
+            loadTexture(file).then((asset: Texture) => {
+              files.textures[fileID] = asset;
+              onLoad();
+            }).catch(() => {
+              killTimer();
+              // eslint-disable-next-line
+							reject(`Error loading: ${file}`);
+            });
+            break;
+          case 'gltf':
+            GLTFPlayer.loadGLTF(file, () => { }).then((gltf: any) => {
+              files.models[fileID] = gltf;
             }).catch(() => {
               killTimer();
               // eslint-disable-next-line

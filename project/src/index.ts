@@ -1,8 +1,9 @@
 // CSS
 import '@scss/main.scss';
 // Models
-import { copyAssets, requiredFiles } from '@ts/models/load';
+import { assets, requiredFiles } from '@ts/models/load';
 import { updateSettings } from '@ts/models/settings';
+import gl from '@ts/models/three';
 // Controllers
 import App from '@ts/controllers/App';
 // Utils
@@ -13,6 +14,7 @@ window.onload = () => {
   // Determine quality
   updateSettings().then(() => {
     if (debug.enabled) debug.init();
+    gl.init();
     
     // Load required files
     const loadingSection = document.getElementById('loading')!;
@@ -20,9 +22,7 @@ window.onload = () => {
     loader.loadAssets(requiredFiles, (progress: number) => {
       const loaded = Math.round(progress * 100);
       loadingText.innerHTML = `LOADING: ${loaded}%`;
-    }).then((downloaded: any) => {
-      copyAssets(downloaded);
-
+    }).then(() => {
       // HTML
       loadingSection.classList.add('hidden');
       const welcomeSection = document.getElementById('welcome')!;

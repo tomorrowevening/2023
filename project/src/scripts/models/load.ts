@@ -1,14 +1,21 @@
 export const assets = {
   audio: {},
+  cubeTextures: {},
   custom: {},
   images: {},
   json: {},
+  models: {},
+  textures: {},
   videos: {}
 };
 
+const assetTypes: Array<string> = [];
+for (let i in assets) {
+  assetTypes.push(i);
+}
+
 export function copyAssets(loaded: any) {
-  const type = ['audio', 'custom', 'images', 'json', 'videos'];
-  type.forEach((value: string) => {
+  assetTypes.forEach((value: string) => {
     assets[value] = {
       ...assets[value],
       ...loaded[value]
@@ -20,6 +27,18 @@ export const requiredFiles = [
   {
     type: 'json',
     file: 'json/config.json'
+  },
+  {
+    type: 'json',
+    file: 'json/VarelaRound-Regular.json'
+  },
+  {
+    type: 'texture',
+    file: 'images/fonts/VarelaRound-Regular.png'
+  },
+  {
+    type: 'texture',
+    file: 'images/ui/te_logo.png'
   }
 ];
 

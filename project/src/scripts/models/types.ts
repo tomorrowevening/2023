@@ -1,6 +1,6 @@
 export const Events = {
   SHOW_SCENE: 'showScene',
-  HIDE_SCENE: 'hideScene'
+  SCENE_HIDDEN: 'sceneHidden'
 };
 
 export enum Scenes {

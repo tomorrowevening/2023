@@ -12,7 +12,6 @@ import scenes from '@ts/controllers/SceneController';
 export default class App {
   constructor() {
     if (debug.enabled) studio.initialize();
-    gl.init();
   }
 
   init() {
@@ -26,6 +25,7 @@ export default class App {
     raf.play();
     this.resize();
     window.addEventListener('resize', this.resize, false);
+    scenes.enable();
     dispatcher.dispatchEvent({
       type: Events.SHOW_SCENE,
       scene: Scenes.WELCOME

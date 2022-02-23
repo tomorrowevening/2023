@@ -17,16 +17,23 @@ class WebGLInstance {
     const width = window.innerWidth;
     const height = window.innerHeight;
 
-    this.renderTargets.set('main', new WebGLRenderTarget(width, height, {
+    const mainRT = new WebGLRenderTarget(width, height, {
       minFilter: LinearFilter,
       magFilter: NearestFilter
-    }));
+    });
+    mainRT.texture.name = 'mainRTTexture';
 
-    this.renderTargets.set('ui', new WebGLRenderTarget(width, height, {
+    const uiRT = new WebGLRenderTarget(width, height, {
       depthBuffer: false,
       minFilter: LinearFilter,
       magFilter: NearestFilter
-    }));
+    });
+    mainRT.texture.name = 'mainRTTexture';
+    uiRT.texture.name = 'uiTexture';
+
+    // Store
+    this.renderTargets.set('main', mainRT);
+    this.renderTargets.set('ui', uiRT);
   }
 
   init() {
@@ -53,8 +60,9 @@ class WebGLInstance {
   }
 
   resize(width: number, height: number) {
+    const dpr = this.dpr;
     this.renderTargets.forEach((renderTarget: WebGLRenderTarget) => {
-      renderTarget.setSize(width, height);
+      renderTarget.setSize(width * dpr, height * dpr);
     });
     this.renderer.setSize(width, height);
   }

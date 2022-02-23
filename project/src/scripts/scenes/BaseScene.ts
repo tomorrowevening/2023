@@ -1,9 +1,13 @@
 // Libs
 import {
   Clock,
-  Scene
+  OrthographicCamera,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderTarget
 } from 'three';
 // Models
+import gl from '@ts/models/three';
 import { Scenes } from '@ts/models/types';
 // Utils
 import debug from '@ts/utils/debug';
@@ -13,6 +17,8 @@ export default class BaseScene {
   sceneType: Scenes;
 
   scene: Scene;
+
+  protected camera!: OrthographicCamera | PerspectiveCamera;
 
   protected clock: Clock;
 
@@ -53,6 +59,13 @@ export default class BaseScene {
   }
 
   update() { }
-  draw() { }
+
+  draw(renderTarget: WebGLRenderTarget | null) {
+    gl.renderer.setRenderTarget(renderTarget);
+    gl.renderer.setClearAlpha(0);
+    gl.renderer.clear();
+    gl.renderer.render(this.scene, this.camera);
+  }
+
   resize(width: number, height: number) { }
 }

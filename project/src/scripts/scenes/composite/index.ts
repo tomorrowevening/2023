@@ -10,13 +10,20 @@ import gl from '@ts/models/three';
 import CompositeMaterial from '@ts/materials/post/CompositeMaterial';
 
 export default class CompositeScene extends Scene {
+  material: CompositeMaterial;
+
   constructor() {
     super();
-    this.add(new Mesh(triangle, new CompositeMaterial()));
+    this.material = new CompositeMaterial();
+    this.add(new Mesh(triangle, this.material));
   }
 
   draw() {
     gl.renderer.setRenderTarget(null);
     gl.renderer.render(this, orthoCamera);
+  }
+
+  resize(width: number, height: number) {
+    this.material.resize(width, height);
   }
 }
