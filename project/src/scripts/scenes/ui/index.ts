@@ -12,6 +12,9 @@ import { anchorGeometryTL } from 'tomorrow_web/utils/three';
 // Models
 import { assets } from '@ts/models/load';
 import gl from '@ts/models/three';
+// Views
+import BaseUI from '@ts/views/ui/BaseUI';
+import UITexture from '@ts/views/ui/UITexture';
 
 const raycaster = new Raycaster();
 const pointer = new Vector2();
@@ -27,17 +30,21 @@ export default class UIScene extends Scene {
 
   init() {
     const size = 50;
-    const geom = new PlaneBufferGeometry(size, size);
-    anchorGeometryTL(geom);
-    const texture = assets.textures['te_logo'];
-    const material = new MeshBasicMaterial({
-      map: texture,
-      depthWrite: false,
-      transparent: true
-    });
-    const mesh = new Mesh(geom, material);
-    mesh.position.set(50, -50, 0);
-    this.add(mesh);
+    const logo = new UITexture(size, size, assets.textures['te_logo']);
+    logo.position.set(50, -50, 0);
+    this.add(logo);
+  }
+
+  enable() {
+    const canvas = gl.renderer.domElement;
+    canvas.addEventListener('pointermove', this.mouseMove, false);
+    canvas.addEventListener('click', this.mouseClick, false);
+  }
+
+  disable() {
+    const canvas = gl.renderer.domElement;
+    canvas.removeEventListener('pointermove', this.mouseMove);
+    canvas.removeEventListener('click', this.mouseClick);
   }
 
   draw() {
@@ -76,5 +83,40 @@ export default class UIScene extends Scene {
     for (let i = 0; i < intersects.length; i++) {
       onIntersection(intersects[i]);
     }
+  }
+
+  private mouseMove = (event: any) => {
+    this.updatePointer(event);
+
+    // for (let i = 0; i < this.children.length; i++) {
+    //   const child = this.children[i];
+    //   if (child['isOver'] === true) {
+    //     child['isOver'] = false;
+    //     console.log('out', this.hoverItems.search(child.uuid));
+    //     // child['rollOut']();
+    //     // console.log('out', child);
+    //   }
+    // }
+
+    this.checkIntersections((obj: any) => {
+      const mesh = obj.object as Mesh;
+      if (mesh['isOver'] === false) {
+        // currentItems += mesh.uuid;
+        console.log('over', obj);
+        mesh['isOver'] = true;
+        mesh['rollOver']();
+      }
+    });
+  }
+
+  private mouseClick = (event: any) => {
+    this.updatePointer(event);
+    this.checkIntersections((obj: any) => {
+      const mesh = obj.object as Mesh;
+      if (mesh['isOver'] !== undefined) {
+        console.log('click', mesh);
+        mesh['click']();
+      }
+    });
   }
 }

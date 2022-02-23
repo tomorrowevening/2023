@@ -1,3 +1,5 @@
+// Libs
+import { dispose } from 'tomorrow_web/utils/three';
 // Models
 import dispatcher from '@ts/models/dispatcher';
 import gl from '@ts/models/three';
@@ -25,6 +27,7 @@ class SceneController {
 
   enable() {
     this.uiScene.init();
+    this.uiScene.enable();
     dispatcher.addEventListener(Events.SHOW_SCENE, this.showScene);
     dispatcher.addEventListener(Events.SCENE_HIDDEN, this.sceneHidden);
   }
@@ -32,6 +35,8 @@ class SceneController {
   dispose() {
     this.currentScene?.dispose();
     this.nextScene?.dispose();
+    this.uiScene.disable();
+    dispose(this.uiScene);
     dispatcher.removeEventListener(Events.SHOW_SCENE, this.showScene);
     dispatcher.removeEventListener(Events.SCENE_HIDDEN, this.sceneHidden);
   }
