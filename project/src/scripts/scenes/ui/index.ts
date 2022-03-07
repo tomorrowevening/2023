@@ -1,26 +1,27 @@
 // Libs
 import {
   Mesh,
-  MeshBasicMaterial,
+  Object3D,
   OrthographicCamera,
-  PlaneBufferGeometry,
   Raycaster,
   Scene,
   Vector2
 } from 'three';
-import { anchorGeometryTL } from 'tomorrow_web/utils/three';
 // Models
 import { assets } from '@ts/models/load';
 import gl from '@ts/models/three';
 // Views
-import BaseUI from '@ts/views/ui/BaseUI';
 import UITexture from '@ts/views/ui/UITexture';
+// Utils
+import { updateCameraOrtho } from 'tomorrow_web/utils/three';
 
 const raycaster = new Raycaster();
 const pointer = new Vector2();
 
 export default class UIScene extends Scene {
   camera: OrthographicCamera;
+
+  private currentIntersection?: Object3D;
 
   constructor() {
     super();
@@ -30,7 +31,9 @@ export default class UIScene extends Scene {
 
   init() {
     const size = 50;
-    const logo = new UITexture(size, size, assets.textures['te_logo']);
+    const logo = new UITexture(size, size, assets.textures['te_logo'], () => {
+      window.location.href = 'http://tomorrowevening.com/';
+    });
     logo.position.set(50, -50, 0);
     this.add(logo);
   }
@@ -58,13 +61,7 @@ export default class UIScene extends Scene {
   }
 
   resize(width: number, height: number) {
-    this.camera.left = width / -2;
-    this.camera.right = width / 2;
-    this.camera.top = height / 2;
-    this.camera.bottom = height / -2;
-    this.camera.position.x = width / 2;
-    this.camera.position.y = height / -2;
-    this.camera.updateProjectionMatrix();
+    updateCameraOrtho(this.camera, width, height);
   }
 
   // Incase we want to check for interactions
@@ -80,31 +77,35 @@ export default class UIScene extends Scene {
 
     // calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects(this.children);
-    for (let i = 0; i < intersects.length; i++) {
-      onIntersection(intersects[i]);
+    onIntersection(intersects[0]);
+  }
+
+  private rollOver() {
+    if (this.currentIntersection !== undefined && this.currentIntersection['isOver'] === false) {
+      this.currentIntersection['isOver'] = true;
+      this.currentIntersection['rollOver']();
+    }
+  }
+
+  private rollOut() {
+    if (this.currentIntersection !== undefined && this.currentIntersection['isOver'] === true) {
+      this.currentIntersection['isOver'] = false;
+      this.currentIntersection['rollOut']();
     }
   }
 
   private mouseMove = (event: any) => {
     this.updatePointer(event);
 
-    // for (let i = 0; i < this.children.length; i++) {
-    //   const child = this.children[i];
-    //   if (child['isOver'] === true) {
-    //     child['isOver'] = false;
-    //     console.log('out', this.hoverItems.search(child.uuid));
-    //     // child['rollOut']();
-    //     // console.log('out', child);
-    //   }
-    // }
-
     this.checkIntersections((obj: any) => {
-      const mesh = obj.object as Mesh;
-      if (mesh['isOver'] === false) {
-        // currentItems += mesh.uuid;
-        console.log('over', obj);
-        mesh['isOver'] = true;
-        mesh['rollOver']();
+      if (obj !== undefined) {
+        const isNew = this.currentIntersection !== obj.object;
+        if (isNew) this.rollOut();
+        this.currentIntersection = obj.object;
+        if (isNew) this.rollOver();
+      } else {
+        this.rollOut();
+        this.currentIntersection = undefined;
       }
     });
   }
@@ -112,10 +113,11 @@ export default class UIScene extends Scene {
   private mouseClick = (event: any) => {
     this.updatePointer(event);
     this.checkIntersections((obj: any) => {
-      const mesh = obj.object as Mesh;
-      if (mesh['isOver'] !== undefined) {
-        console.log('click', mesh);
-        mesh['click']();
+      if (obj !== undefined) {
+        const mesh = obj.object as Mesh;
+        if (mesh['isOver'] !== undefined) {
+          mesh['click']();
+        }
       }
     });
   }

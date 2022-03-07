@@ -30,6 +30,10 @@ export const requiredFiles = [
   },
   {
     type: 'json',
+    file: 'json/animation.json'
+  },
+  {
+    type: 'json',
     file: 'json/VarelaRound-Regular.json'
   },
   {
@@ -39,7 +43,11 @@ export const requiredFiles = [
   {
     type: 'texture',
     file: 'images/ui/te_logo.png'
-  }
+  },
+  {
+    type: 'texture',
+    file: 'images/ui/loadBar.png'
+  },
 ];
 
 export const files = [];

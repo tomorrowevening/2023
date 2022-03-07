@@ -42,7 +42,7 @@ export class TextureProjectionMaterial extends ShaderMaterial {
       vertexShader: vertex,
       fragmentShader: fragment,
       transparent: true,
-      type: 'effect/TextureProjection'
+      type: 'materials/effect/TextureProjection'
     });
     if (parameters !== undefined) {
       this.setValues(parameters);

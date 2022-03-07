@@ -6,13 +6,14 @@ import {
   MeshNormalMaterial,
   PerspectiveCamera
 } from 'three';
-import { delay } from 'tomorrow_web/utils/dom';
 import gsap from 'gsap';
 // Models
 import dispatcher from '@ts/models/dispatcher';
 import { Events, Scenes } from '@ts/models/types';
 // Views
 import BaseScene from '@ts/scenes/BaseScene';
+// Utils
+import debug from '@ts/utils/debug';
 
 export default class IntroScene extends BaseScene {
   mesh!: Mesh;
@@ -34,6 +35,10 @@ export default class IntroScene extends BaseScene {
     });
     this.mesh = new Mesh(geom, mat);
     this.scene.add(this.mesh);
+  }
+
+  protected override initDebug() {
+      const folder = debug.folder('Intro', false, debug.parent);
   }
 
   override show(): void {

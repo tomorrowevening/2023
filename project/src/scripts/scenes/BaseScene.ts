@@ -6,9 +6,11 @@ import {
   Scene,
   WebGLRenderTarget
 } from 'three';
+import { getProject, IProject, ISheet } from '@theatre/core';
 // Models
+import { assets } from '@ts/models/load';
 import gl from '@ts/models/three';
-import { Scenes } from '@ts/models/types';
+import { Scenes, theatreName } from '@ts/models/types';
 // Utils
 import debug from '@ts/utils/debug';
 import { dispose } from 'tomorrow_web/utils/three';
@@ -22,10 +24,17 @@ export default class BaseScene {
 
   protected clock: Clock;
 
+  protected project: IProject;
+
+  protected animation: ISheet;
+
   constructor(scene: Scenes) {
     this.sceneType = scene;
     this.scene = new Scene();
     this.clock = new Clock();
+    const animation = assets.json['animation'];
+    this.project = getProject(theatreName, { state: animation });
+    this.animation = this.project.sheet(scene);
   }
 
   init() {

@@ -32,7 +32,7 @@ export default class CompositeMaterial extends ShaderMaterial {
       },
       vertexShader: vertex,
       fragmentShader: fragment,
-      type: 'post/CompositeMaterial'
+      type: 'materials/post/CompositeMaterial'
     });
   }
 

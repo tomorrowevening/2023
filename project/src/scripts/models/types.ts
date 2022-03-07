@@ -4,6 +4,8 @@ export const Events = {
 };
 
 export enum Scenes {
-  WELCOME,
-  INTRO
+  WELCOME = 'welcome',
+  INTRO = 'intro'
 }
+
+export const theatreName = '2023'

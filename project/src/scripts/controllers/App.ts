@@ -8,6 +8,7 @@ import gl from '@ts/models/three';
 import { Events, Scenes } from '@ts/models/types';
 // Controllers
 import scenes from '@ts/controllers/SceneController';
+import smoothing from 'tomorrow_web/animation/Smooth';
 
 export default class App {
   constructor() {
@@ -18,6 +19,7 @@ export default class App {
     gl.renderer.info.autoReset = false;
     raf.add('app', () => {
       debug.begin();
+      smoothing.update();
       this.update();
       this.draw();
       debug.end();
