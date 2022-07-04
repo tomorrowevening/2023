@@ -14,7 +14,7 @@ const assets = {
   audio: false,
   images: true,
   json: true,
-  models: false,
+  models: true,
   video: false
 };
 

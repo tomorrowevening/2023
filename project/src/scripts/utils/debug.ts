@@ -83,6 +83,7 @@ export class Debugger {
       pages: [
         { title: 'System' },
         { title: 'Experience' },
+        { title: 'Preset' },
       ],
     });
   }
@@ -403,6 +404,10 @@ export class Debugger {
 
   get parent() {
     return this.tabs.pages[1];
+  }
+
+  get presetTab() {
+    return this.tabs.pages[2];
   }
 }
 

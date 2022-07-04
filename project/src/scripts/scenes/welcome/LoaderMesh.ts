@@ -38,17 +38,22 @@ class LoadBubble extends Mesh {
 }
 
 export default class LoadBar extends Object3D {
+  width: number = 0;
+  height: number = 0;
   private _opacity: number = 0;
   private _progress: number = 0;
 
   constructor() {
     super();
+    this.height = unitSize.y;
+
     const texture = assets.textures['loadBar'];
     texture.anisotropy = settings.anisotropy;
     texture.needsUpdate = true;
     for (let i = 0; i < 10; ++i) {
       const unit = new LoadBubble(texture);
       unit.position.x = i * unitSize.x;
+      this.width = unit.position.x + unitSize.x;
       this.add(unit);
     }
   }

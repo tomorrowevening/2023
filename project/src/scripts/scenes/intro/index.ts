@@ -1,10 +1,13 @@
 // Libs
 import {
   BoxBufferGeometry,
+  DirectionalLight,
+  Group,
   MathUtils,
   Mesh,
   MeshNormalMaterial,
-  PerspectiveCamera
+  PerspectiveCamera,
+  SphereBufferGeometry
 } from 'three';
 import gsap from 'gsap';
 // Models
@@ -14,14 +17,17 @@ import { Events, Scenes } from '@ts/models/types';
 import BaseScene from '@ts/scenes/BaseScene';
 // Utils
 import debug from '@ts/utils/debug';
+import { DebugClick } from '@ts/utils/three';
 
 export default class IntroScene extends BaseScene {
   mesh!: Mesh;
 
+  private click!: DebugClick
+
   constructor() {
     super(Scenes.INTRO);
     this.camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-    this.camera.position.set(0, 0, 300);
+    this.camera.position.set(0, 0, 500);
   }
 
   override init(): void {
@@ -29,16 +35,31 @@ export default class IntroScene extends BaseScene {
   }
 
   override initScene(): void {
-    const geom = new BoxBufferGeometry(100, 100, 100);
-    const mat = new MeshNormalMaterial({
-      transparent: true
-    });
-    this.mesh = new Mesh(geom, mat);
+    const light = new DirectionalLight();
+    light.name = 'directionalLight';
+    light.position.set(200, 1000, 500);
+    this.scene.add(light);
+
+    this.mesh = new Mesh(
+      new BoxBufferGeometry(100, 100, 100),
+      new MeshNormalMaterial()
+    );
+    this.mesh.name = 'spin'
     this.scene.add(this.mesh);
+
+    const test = new Mesh(
+      new SphereBufferGeometry(50),
+      new MeshNormalMaterial()
+    )
+    test.name = 'test'
+    test.position.set(-200, 0, 0);
+    this.scene.add(test);
   }
 
   protected override initDebug() {
-      const folder = debug.folder('Intro', false, debug.parent);
+    const folder = debug.folder('Intro', false, debug.parent);
+    this.click = new DebugClick(this.scene, this.camera);
+    this.click.enable();
   }
 
   override show(): void {
@@ -58,6 +79,8 @@ export default class IntroScene extends BaseScene {
         dispatcher.dispatchEvent({ type: Events.SCENE_HIDDEN });
       }
     });
+
+    if (debug.enabled) this.click.disable()
   }
 
   update(): void {

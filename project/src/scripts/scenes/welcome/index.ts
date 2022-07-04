@@ -1,5 +1,5 @@
 // Libs
-import { Mesh, OrthographicCamera, PlaneBufferGeometry } from 'three';
+import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneBufferGeometry } from 'three';
 import gsap from 'gsap';
 import { anchorGeometryTL, dispose, orthoCamera, updateCameraOrtho } from 'tomorrow_web/utils/three';
 import { delay } from 'tomorrow_web/utils/dom';
@@ -56,6 +56,7 @@ export default class WelcomeScene extends BaseScene {
     const geom = new PlaneBufferGeometry(1, 1, 1, 1);
     anchorGeometryTL(geom);
     bgMesh = new Mesh(geom, this.bgMaterial);
+    // bgMesh.visible = false
     this.scene.add(bgMesh);
 
     this.loadBar = new LoadBar();
@@ -63,13 +64,14 @@ export default class WelcomeScene extends BaseScene {
 
   override draw(): void {
     this.bgMaterial.update(this.clock.getDelta());
-    const renderTarget = gl.renderTargets.get('main');
-    if (renderTarget) gl.renderer.setRenderTarget(renderTarget);
-    gl.renderer.clear();
+    // const renderTarget = gl.renderTargets.get('main');
+    // if (renderTarget) gl.renderer.setRenderTarget(renderTarget);
+    // gl.renderer.clear();
     gl.renderer.render(this.scene, this.camera);
   }
 
   resize(width: number, height: number) {
+    this.loadBar.position.x = (width / 2) - (this.loadBar.width / 2);
     updateCameraOrtho(this.camera as OrthographicCamera, width, height);
     bgMesh.scale.set(width, height);
   }

@@ -48,6 +48,10 @@ export const requiredFiles = [
     type: 'texture',
     file: 'images/ui/loadBar.png'
   },
+  {
+    type: 'fbx',
+    file: 'models/idle.fbx'
+  },
 ];
 
 export const files = [];

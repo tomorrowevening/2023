@@ -20,7 +20,7 @@ export default class BaseScene {
 
   scene: Scene;
 
-  protected camera!: OrthographicCamera | PerspectiveCamera;
+  camera!: OrthographicCamera | PerspectiveCamera;
 
   protected clock: Clock;
 
@@ -77,4 +77,8 @@ export default class BaseScene {
   }
 
   resize(width: number, height: number) { }
+
+  setScene(scene: Scene) {
+    this.scene = scene;
+  }
 }

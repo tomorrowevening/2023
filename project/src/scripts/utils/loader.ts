@@ -7,6 +7,8 @@ import {
 } from 'tomorrow_web/utils/dom';
 import {
   loadCubeTexture,
+  loadFBX,
+  loadOBJ,
   loadTexture
 } from './three';
 import { assets, copyAssets } from '@ts/models/load';
@@ -52,12 +54,22 @@ export class Loader {
     });
   }
 
+  async loadImage(
+    path: string,
+    onProgress: (progress: number) => void
+  ): Promise < HTMLImageElement > {
+    if (this.supportsBlob) {
+      return this.loadImageBlob(path, onProgress);
+    }
+    return this.loadImageElement(path);
+  }
+
   /**
 	 * Loads an XHR Image
 	 * @param path The URL of the image
 	 * @param onProgress A callback function with the loaded progress
 	 */
-  async loadImageBlob(
+  private async loadImageBlob(
     path: string,
     onProgress: (progress: number) => void
   ): Promise < HTMLImageElement > {
@@ -79,7 +91,7 @@ export class Loader {
 	 * @param path The URL of the image
 	 * @returns A Promise with the image as a param
 	 */
-  async loadImageElement(
+  private async loadImageElement(
     path: string
   ): Promise < HTMLImageElement > {
     return new Promise < HTMLImageElement >((resolve, reject) => {
@@ -312,7 +324,7 @@ export class Loader {
             }).catch(() => {
               killTimer();
               // eslint-disable-next-line
-							reject(`Error loading: ${file}`);
+              reject(`Error loading: ${file}`);
             });
             break;
           case 'cubeTexture':
@@ -322,7 +334,7 @@ export class Loader {
             }).catch(() => {
               killTimer();
               // eslint-disable-next-line
-							reject(`Error loading: ${file}`);
+              reject(`Error loading: ${file}`);
             });
             break;
           case 'texture':
@@ -332,16 +344,37 @@ export class Loader {
             }).catch(() => {
               killTimer();
               // eslint-disable-next-line
-							reject(`Error loading: ${file}`);
+              reject(`Error loading: ${file}`);
             });
             break;
           case 'gltf':
-            GLTFPlayer.loadGLTF(file, () => { }).then((gltf: any) => {
-              files.models[fileID] = gltf;
+            GLTFPlayer.loadGLTF(file, () => { }).then((model: any) => {
+              files.models[fileID] = model;
+              onLoad();
             }).catch(() => {
               killTimer();
               // eslint-disable-next-line
-							reject(`Error loading: ${file}`);
+              reject(`Error loading: ${file}`);
+            });
+            break;
+          case 'fbx':
+            loadFBX(file).then((model: any) => {
+              files.models[fileID] = model;
+              onLoad();
+            }).catch(() => {
+              killTimer();
+              // eslint-disable-next-line
+              reject(`Error loading: ${file}`);
+            });
+            break;
+          case 'obj':
+            loadOBJ(file).then((model: any) => {
+              files.models[fileID] = model;
+              onLoad();
+            }).catch(() => {
+              killTimer();
+              // eslint-disable-next-line
+              reject(`Error loading: ${file}`);
             });
             break;
         }

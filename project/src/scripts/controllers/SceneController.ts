@@ -1,4 +1,5 @@
 // Libs
+import { ObjectLoader, Scene } from 'three';
 import { dispose } from 'tomorrow_web/utils/three';
 // Models
 import dispatcher from '@ts/models/dispatcher';
@@ -10,6 +11,7 @@ import CompositeScene from '@ts/scenes/composite';
 import UIScene from '@ts/scenes/ui';
 import WelcomeScene from '@ts/scenes/welcome';
 import IntroScene from '@ts/scenes/intro';
+import debug from '@ts/utils/debug';
 
 class SceneController {
   currentScene?: BaseScene;
@@ -41,15 +43,36 @@ class SceneController {
     dispatcher.removeEventListener(Events.SCENE_HIDDEN, this.sceneHidden);
   }
 
+  initDebug() {
+    const config = {
+      import: '',
+    };
+    let importInput;
+    debug.addButton(debug.presetTab, 'Export Scene', () => {
+      config.import = JSON.stringify(this.currentScene?.scene.toJSON());
+      console.log(config.import);
+      importInput.controller_.binding.target.write(config.import);
+      importInput.refresh();
+    });
+    debug.addButton(debug.presetTab, 'Import Scene', () => {
+      const json = JSON.parse(config.import);
+      const loader = new ObjectLoader()
+      const scene = loader.parse(json) as Scene;
+      this.currentScene?.setScene(scene);
+    });
+    importInput = debug.addInput(debug.presetTab, config, 'import');
+  }
+
   update() {
     this.currentScene?.update();
   }
 
   draw() {
-    const mainRT = gl.renderTargets.get('main')!;
-    this.currentScene?.draw(mainRT);
-    this.uiScene.draw();
-    this.compositeScene.draw();
+    // const mainRT = gl.renderTargets.get('main')!;
+    // this.currentScene?.draw(mainRT);
+    // this.uiScene.draw();
+    // this.compositeScene.draw();
+    this.currentScene?.draw(null);
   }
 
   resize(width: number, height: number) {
@@ -69,7 +92,7 @@ class SceneController {
     }
 
     if (this.currentScene !== undefined) {
-      console.log('hide current scene', this.currentScene.sceneType);
+      // console.log('hide current scene', this.currentScene.sceneType);
       this.currentScene.hide();
     } else {
       this.showNextScene();
@@ -82,7 +105,7 @@ class SceneController {
   }
 
   private showNextScene() {
-    console.log('showNextScene::', this.nextScene?.sceneType);
+    // console.log('showNextScene::', this.nextScene?.sceneType);
     this.currentScene = this.nextScene;
     this.nextScene = undefined;
     this.currentScene?.init();
